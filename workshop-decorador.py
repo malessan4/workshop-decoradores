@@ -21,3 +21,26 @@ def mensaje():
 mensaje()
 
 
+def authorize(func):
+    def envoltorio(user, *args, **kwargs):
+        if user.is_admin:
+            return func(user, *args, **kwargs)
+        else:
+            print(f'{user.name} no tiene permisos')
+    return envoltorio
+
+class User:
+    def __init__(self, name, is_admin=False):
+        self.name = name
+        self.is_admin = is_admin
+    
+    @authorize    
+    def escribirMensaje(self):
+        mensaje = input(f'{self.name}: que mensaje quiere enviar: ')
+        print(f'{self.name} envio un mensaje ')
+
+persona1 = User("Nacho",True)       
+persona1.escribirMensaje()
+
+persona2 = User("Marcos", False)
+persona2.escribirMensaje()
