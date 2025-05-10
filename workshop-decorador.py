@@ -14,7 +14,16 @@ def decorator(func):
         print("Stop decoration")
     return envoltorio    
 
-
+import time
+def tiempo_calculado(func):
+    def envoltorio(*args, **kwargs):
+        inicio = time.time()
+        func(*args, **kwargs)
+        final = time.time()
+        print(f'Tiempo transcurrido: {final-inicio}')
+    return envoltorio
+    
+@tiempo_calculado
 @decorator
 def mensaje():
     print("CQ, CQ PROBRANDO")
@@ -34,7 +43,9 @@ class User:
         self.name = name
         self.is_admin = is_admin
     
-    @authorize    
+    
+    @authorize 
+    @tiempo_calculado   
     def escribirMensaje(self):
         mensaje = input(f'{self.name}: que mensaje quiere enviar: ')
         print(f'{self.name} envio un mensaje ')
@@ -44,3 +55,4 @@ persona1.escribirMensaje()
 
 persona2 = User("Marcos", False)
 persona2.escribirMensaje()
+
